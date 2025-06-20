@@ -23,45 +23,53 @@
             </form>
         </div>
     </div>
+
     <header>
         <h2>Tic Tac Toe!</h2>
-        <h4>Player Name's Turn</h4>
+        <h4>Can You Outsmart the Grid?</h4>
     </header>
     <div class = "buttons">
             <button>Restart Game</button>
             <button>Change Name</button>
     </div>
+
+    <div class = "stat-box">
+        <div class = "stats">
+            <div class = "player-one-score">
+                <p>Player One</p>
+                <h3>0</h3>
+            </div>
+            <div class = "player-ties">
+                <p>Ties</p>
+                <h3>0</h3>
+            </div>
+            <div class = "player-two-score">
+                <p>Player Two</p>
+                <h3>0</h3>
+            </div>
+        </div>
+    </div>
+
     <main>
         
         <div class = "grid">
 
-            <div class = "cell" id = 0></div>
-            <div class = "cell" id = 1></div>
-            <div class = "cell" id = 2></div>
-            <div class = "cell" id = 3></div>
-            <div class = "cell" id = 4></div>
-            <div class = "cell" id = 5></div>
-            <div class = "cell" id = 6></div>
-            <div class = "cell" id = 7></div>
-            <div class = "cell" id = 8></div>
+            <button class = "cell" id = 0></button>
+            <button class = "cell" id = 1></button>
+            <button class = "cell" id = 2></button>
+            <button class = "cell" id = 3></button>
+            <button class = "cell" id = 4></button>
+            <button class = "cell" id = 5></button>
+            <button class = "cell" id = 6></button>
+            <button class = "cell" id = 7></button>
+            <button class = "cell" id = 8></button>
             
         </div>
 
-        <div class = "stats">
-            <div class = "player-one-score">
-                <p>Player One</p>
-                <h3>Score</h3>
-            </div>
-            <div class = "player-ties">
-                <p>Ties</p>
-                <h3>Score</h3>
-            </div>
-            <div class = "player-two-score">
-                <p>Player Two</p>
-                <h3>Score</h3>
-            </div>
-        </div>
+        
     </main>
+
+
 
 </body>
 <script src = "script.js"></script>
