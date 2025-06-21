@@ -1,17 +1,23 @@
+//setting up the board
 const gameBoard = (function(){
-    const board = ["", "", "", 
+    let board = ["", "", "", 
                    "", "", "", 
                    "", "", ""];
 
-    let resetBoard = () => ["", "", "", "", "", "", "", "", ""];
+    let resetBoard = () => {board = ["", "", "", "", "", "", "", "", ""];}
     let getBoard = () => board;
-    return {getBoard, resetBoard};
-})
 
+    let placeMarker = (playerMarker, index) => {board[index] = playerMarker};
+
+    return {getBoard, resetBoard, placeMarker};
+})();
+
+//player factory
 function createPlayer(marker){
     let score = 0;
     let name;
 
+    //default name
     if(marker == "X"){
       name = "Player One"
     }
@@ -24,22 +30,74 @@ function createPlayer(marker){
     let restartScore = () => score = 0;
     let getName = () => name;
     let setName = (newName) => name = newName;
-    let gerMarker = () => marker();
+    let getMarker = () => marker;
 
-    return {getName, setName, addScore, getScore, restartScore, gerMarker};
+    return {getName, setName, addScore, getScore, restartScore, getMarker};
 }
 
+//controls the entire game and its flow
 function gameController(){
   let board = gameBoard.getBoard();
   const playerOne = createPlayer("X");
   const playerTwo = createPlayer("O");
 
+  let winner;
+  const getWinner = () => winner;
+
+  //determines the current player
   let round = 0;
-  let turn = round % 2 == 0 ? playerOneTurn : playerTwoTurn;
+  let currentPlayer = () => round % 2 == 0 ? playerOne : playerTwo;
+  const getCurrentPlayer = () => currentPlayer();
+
+  let gameEnd = false;
+
+  //allows current player to pick a square and place a marker
+  const gameStart = (index) =>{
+    
+    if (gameEnd == true){
+      return;
+    }
+
+    let player = getCurrentPlayer();
+
+    gameBoard.placeMarker(index, player.getMarker())
+
+    if(checkWinner() == true){
+        winner = player.getName();
+        gameEnd = true;
+        player.addScore();
+    }
+
+    if(board.every(cell => cell != "")){
+      gameEnd = true;
+      winner = "tie";
+    }
+    round++;
+  };
+
+  //checks if a player has won
+  const checkWinner = () => {
+    let b = board;
+    const winningPattern = [
+      [0,1,2], [3,4,5], [6,7,8],
+      [0,3,6], [1,4,7], [2,5,8],
+      [0,4,8], [2,4,6]
+    ];
+
+    return winningPattern.some(pattern =>{
+      const [x,y,z] = pattern;
+      return b[x] && b[x] == b[y] && b[x] == b[z];
+    })
+  };
+
+  const restartGame = () => {
+    gameBoard.resetBoard();
+    round = 0;
+    gameEnd = false;
+    playerOne.restartScore();
+    playerTwo.restartScore();
+  }
+
+  return{gameStart, restartGame, getCurrentPlayer, getWinner}
 }
 
-
-// (function (age) {
-//   console.log(`Your are cool and ${age}`);
-//   return `Your are cool and ${age}`;
-// })(10);
