@@ -194,6 +194,71 @@ main{
     text-shadow: 0 0 10px var(--accent-color2);
 }
 
+
+.announcement-screen{
+    position: fixed;
+    top:0;
+    height:100vh;
+    width:100vw;
+    background-color: rgba(0,0,0,0.5);
+    backdrop-filter:blur(4px);
+    left:0;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    display: none;
+}
+.winner-announcement{
+    background-color: var(--second-color);
+    width: 100vw;
+    height: 30vh;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color:white;
+    text-shadow: 3px 3px 0 var(--accent-color1),
+                -3px -3px 0 var(--accent-color2);
+}
+
+.winner-announcement *{
+    justify-self: center;
+    margin-bottom: 15px;
+}
+
+.winner-announcement button{
+    background-color: transparent;
+    padding: 10px 13px;
+    color: white;
+    border: 3px, solid;
+    border-color: white;
+    transition: ease-in-out all 0.3s;
+    cursor: pointer;
+}
+
+.winner-announcement button:hover{
+    border-color: white;
+    color:white;
+    box-shadow: 5px 5px 0 var(--second-color),
+    inset 5px 5px 0 var(--second-color);
+    text-shadow: 0 0 10px var(--second-color);
+    color:var(--accent-color1);
+    
+}
+
+
+
+
+
+
+
+
 .change-name{
     display:none;
 }
+
+.display{
+    display:block;
+}
+

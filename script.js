@@ -1,103 +1,187 @@
-//setting up the board
-const gameBoard = (function(){
-    let board = ["", "", "", 
-                   "", "", "", 
-                   "", "", ""];
+window.addEventListener("DOMContentLoaded", () =>{
+    //setting up the board
+  const gameBoard = (function(){
+      let board = ["", "", "", 
+                    "", "", "", 
+                    "", "", ""];
 
-    let resetBoard = () => {board = ["", "", "", "", "", "", "", "", ""];}
-    let getBoard = () => board;
+      let resetBoard = () => {board = ["", "", "", "", "", "", "", "", ""];}
+      let getBoard = () => board;
 
-    let placeMarker = (playerMarker, index) => {board[index] = playerMarker};
+      let placeMarker = (playerMarker, index) => {board[index] = playerMarker};
 
-    return {getBoard, resetBoard, placeMarker};
-})();
+      return {getBoard, resetBoard, placeMarker};
+  })();
 
-//player factory
-function createPlayer(marker){
-    let score = 0;
-    let name;
+  //player factory
+  function createPlayer(marker){
+      let score = 0;
+      let name;
 
-    //default name
-    if(marker == "X"){
-      name = "Player One"
-    }
-    else{
-      name = "Player Two"
-    }
+      //default name
+      if(marker == "X"){
+        name = "Player One"
+      }
+      else{
+        name = "Player Two"
+      }
 
-    let addScore = () => score++;
-    let getScore = () => score;
-    let restartScore = () => score = 0;
-    let getName = () => name;
-    let setName = (newName) => name = newName;
-    let getMarker = () => marker;
+      let addScore = () => score++;
+      let getScore = () => score;
+      let restartScore = () => score = 0;
+      let getName = () => name;
+      let setName = (newName) => name = newName;
+      let getMarker = () => marker;
 
-    return {getName, setName, addScore, getScore, restartScore, getMarker};
-}
-
-//controls the entire game and its flow
-function gameController(){
-  let board = gameBoard.getBoard();
-  const playerOne = createPlayer("X");
-  const playerTwo = createPlayer("O");
-
-  let winner;
-  const getWinner = () => winner;
-
-  //determines the current player
-  let round = 0;
-  let currentPlayer = () => round % 2 == 0 ? playerOne : playerTwo;
-  const getCurrentPlayer = () => currentPlayer();
-
-  let gameEnd = false;
-
-  //allows current player to pick a square and place a marker
-  const gameStart = (index) =>{
-    
-    if (gameEnd == true){
-      return;
-    }
-
-    let player = getCurrentPlayer();
-
-    gameBoard.placeMarker(index, player.getMarker())
-
-    if(checkWinner() == true){
-        winner = player.getName();
-        gameEnd = true;
-        player.addScore();
-    }
-
-    if(board.every(cell => cell != "")){
-      gameEnd = true;
-      winner = "tie";
-    }
-    round++;
-  };
-
-  //checks if a player has won
-  const checkWinner = () => {
-    let b = board;
-    const winningPattern = [
-      [0,1,2], [3,4,5], [6,7,8],
-      [0,3,6], [1,4,7], [2,5,8],
-      [0,4,8], [2,4,6]
-    ];
-
-    return winningPattern.some(pattern =>{
-      const [x,y,z] = pattern;
-      return b[x] && b[x] == b[y] && b[x] == b[z];
-    })
-  };
-
-  const restartGame = () => {
-    gameBoard.resetBoard();
-    round = 0;
-    gameEnd = false;
-    playerOne.restartScore();
-    playerTwo.restartScore();
+      return {getName, setName, addScore, getScore, restartScore, getMarker};
   }
 
-  return{gameStart, restartGame, getCurrentPlayer, getWinner}
-}
+  //controls the entire game and its flow
+  function gameController(){
+    let board = gameBoard.getBoard();
+    let ties = 0;
+    const playerOne = createPlayer("X");
+    const playerTwo = createPlayer("O");
+    const getPlayerOne = () => playerOne;
+    const getPlayerTwo = () => playerTwo;
+    const getTies = () => ties;
 
+    let winner;
+    const getWinner = () => winner;
+
+    //determines the current player
+    let round = 0;
+    let currentPlayer = () => round % 2 == 0 ? playerOne : playerTwo;
+    const getCurrentPlayer = () => currentPlayer();
+
+    let gameEnd = false;
+
+    //allows current player to pick a square and place a marker
+    const gameStart = (index) =>{
+      
+      if (gameEnd == true){
+        return;
+      }
+
+      let player = getCurrentPlayer();
+
+      gameBoard.placeMarker(index, player.getMarker())
+
+      if(checkWinner() == true){
+          winner = player.getName();
+          gameEnd = true;
+          player.addScore();
+      }
+
+      else if(board.every(cell => cell != "")){
+        gameEnd = true;
+        winner = "tie";
+        ties++;
+      }
+      round++;
+    };
+
+    //checks if a player has won
+    const checkWinner = () => {
+      let b = board;
+      const winningPattern = [
+        [0,1,2], [3,4,5], [6,7,8],
+        [0,3,6], [1,4,7], [2,5,8],
+        [0,4,8], [2,4,6]
+      ];
+
+      return winningPattern.some(pattern =>{
+        const [x,y,z] = pattern;
+        return b[x] && b[x] == b[y] && b[x] == b[z];
+      })
+    };
+
+    const restartGame = () => {
+      gameBoard.resetBoard();
+      round = 0;
+      gameEnd = false;
+      playerOne.restartScore();
+      playerTwo.restartScore();
+    }
+
+    return{gameStart, restartGame, getCurrentPlayer, getWinner, getPlayerOne, getPlayerTwo, getTies}
+  }
+
+  const displayController = (function(){
+      const game = gameController();
+
+      const cells = document.querySelectorAll(".cell");
+      const restart = document.getElementById("restart");
+      const change = document.getElementById("change");
+
+      let firstPlayerName = document.getElementById("first-player-name");
+      let secondPlayerName = document.getElementById("second-player-name");
+
+      let playerOneScore = document.getElementById("player-one-score-text");
+      let playerTwoScore = document.getElementById("player-two-score-text");
+      let playerTieScore = document.getElementById("player-tie-score-text");
+
+      let announcement = document.querySelector(".announcement-screen");
+      let congratulatoryMessage = document.querySelector(".first-header");
+      let winnerAnnouncement = document.querySelector(".second-header");
+
+      let changeNameBox = document.querySelector(".change-name");
+
+      const displayBoard = () => {
+        const board =gameBoard.getBoard();
+        cells.forEach((cells, i) => {
+          cells.textContent = board[i];
+        });
+      };
+
+      const updateScores = () =>{
+        playerOneScore.innerText = game.getPlayerOne().getScore();
+        playerTwoScore.innerText = game.getPlayerTwo().getScore();
+        playerTieScore.innerHTML = game.getTies();
+      };
+
+      const clickCells = () =>{
+        cells.forEach(cell =>{
+          cell.addEventListener("click", () =>{
+            const button = +cell.id;
+            game.gameStart(button);
+            displayBoard();
+
+            let winner = game.getWinner();
+
+            if (winner == "tie"){
+              congratulatoryMessage.innerText = "It's a Tie!";
+              winnerAnnouncement.innerText = "No One Won!";
+            }
+            if (winner == game.getPlayerOne().getName()){
+              congratulatoryMessage.innerText = "Congratulations!";
+              winnerAnnouncement.innerText = `${winner} Have Won the Round!`;
+            }
+            if (winner == game.getPlayerTwo().getName()){
+              congratulatoryMessage.innerText = "Congratulations!";
+              winnerAnnouncement.innerText = `${winner} Have Won the Round!`;
+            }
+            
+          });
+        });
+        updateScores();
+      };
+
+      restart.addEventListener("click", ()=>{
+        game.restartGame();
+        displayBoard();
+      });
+
+      change.addEventListener("click", () =>{
+        changeNameBox.classList.add("display");
+      })
+
+      const callGame = () =>{
+        displayBoard();
+        updateScores();
+        clickCells();
+      };
+
+      callGame();
+  })();
+})
