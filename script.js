@@ -1,4 +1,4 @@
-window.addEventListener("DOMContentLoaded", () =>{
+
     //setting up the board
   const gameBoard = (function(){
       let board = ["", "", "", 
@@ -8,7 +8,10 @@ window.addEventListener("DOMContentLoaded", () =>{
       let resetBoard = () => {board = ["", "", "", "", "", "", "", "", ""];}
       let getBoard = () => board;
 
-      let placeMarker = (playerMarker, index) => {board[index] = playerMarker};
+      let placeMarker = (index, playerMarker) => {
+        board[index] = playerMarker;
+        return true;
+      };
 
       return {getBoard, resetBoard, placeMarker};
   })();
@@ -38,7 +41,9 @@ window.addEventListener("DOMContentLoaded", () =>{
 
   //controls the entire game and its flow
   function gameController(){
+
     let board = gameBoard.getBoard();
+    
     let ties = 0;
     const playerOne = createPlayer("X");
     const playerTwo = createPlayer("O");
@@ -58,14 +63,14 @@ window.addEventListener("DOMContentLoaded", () =>{
 
     //allows current player to pick a square and place a marker
     const gameStart = (index) =>{
-      
       if (gameEnd == true){
         return;
       }
 
       let player = getCurrentPlayer();
 
-      gameBoard.placeMarker(index, player.getMarker())
+      gameBoard.placeMarker(index, player.getMarker());
+      round++;
 
       if(checkWinner() == true){
           winner = player.getName();
@@ -78,12 +83,12 @@ window.addEventListener("DOMContentLoaded", () =>{
         winner = "tie";
         ties++;
       }
-      round++;
+      
     };
 
     //checks if a player has won
     const checkWinner = () => {
-      let b = board;
+      let b = gameBoard.getBoard(); 
       const winningPattern = [
         [0,1,2], [3,4,5], [6,7,8],
         [0,3,6], [1,4,7], [2,5,8],
@@ -99,16 +104,18 @@ window.addEventListener("DOMContentLoaded", () =>{
     const restartGame = () => {
       gameBoard.resetBoard();
       round = 0;
+      ties = 0;
       gameEnd = false;
       playerOne.restartScore();
       playerTwo.restartScore();
+      winner = undefined;
     }
 
     return{gameStart, restartGame, getCurrentPlayer, getWinner, getPlayerOne, getPlayerTwo, getTies}
   }
 
   const displayController = (function(){
-      const game = gameController();
+      window.game = gameController();
 
       const cells = document.querySelectorAll(".cell");
       const restart = document.getElementById("restart");
@@ -144,6 +151,9 @@ window.addEventListener("DOMContentLoaded", () =>{
         cells.forEach(cell =>{
           cell.addEventListener("click", () =>{
             const button = +cell.id;
+            const board = gameBoard.getBoard();
+
+            if (board[button] !== "") return;
             game.gameStart(button);
             displayBoard();
 
@@ -152,24 +162,24 @@ window.addEventListener("DOMContentLoaded", () =>{
             if (winner == "tie"){
               congratulatoryMessage.innerText = "It's a Tie!";
               winnerAnnouncement.innerText = "No One Won!";
+              announcement.classList.add("display");
             }
-            if (winner == game.getPlayerOne().getName()){
+            if (winner == game.getPlayerOne().getName() || winner == game.getPlayerTwo().getName()){
               congratulatoryMessage.innerText = "Congratulations!";
               winnerAnnouncement.innerText = `${winner} Have Won the Round!`;
-            }
-            if (winner == game.getPlayerTwo().getName()){
-              congratulatoryMessage.innerText = "Congratulations!";
-              winnerAnnouncement.innerText = `${winner} Have Won the Round!`;
+              announcement.classList.add("display");
             }
             
+            updateScores();
           });
         });
-        updateScores();
+        
       };
 
       restart.addEventListener("click", ()=>{
         game.restartGame();
         displayBoard();
+        updateScores();
       });
 
       change.addEventListener("click", () =>{
@@ -184,4 +194,3 @@ window.addEventListener("DOMContentLoaded", () =>{
 
       callGame();
   })();
-})
