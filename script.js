@@ -177,6 +177,8 @@
             const button = +cell.id;
             const board = gameBoard.getBoard();
 
+            
+
             if (board[button] !== "") return;
             game.gameStart(button);
             displayBoard();

@@ -86,6 +86,7 @@ main{
 }
 
 .grid{
+    
     box-sizing: content-box;
     display:grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -118,6 +119,7 @@ main{
     height: 100%;
     border-radius: 5px;
     transition: all 0.3s;
+    color:white;
 }
 
 .grid button:hover{
