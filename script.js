@@ -51,7 +51,6 @@
     const getPlayerTwo = () => playerTwo;
     const getTies = () => ties;
 
-    const buttons = querySelector(".grid")
     let winner;
     const getWinner = () => winner;
 
@@ -70,11 +69,6 @@
 
       let player = getCurrentPlayer();
 
-      if (player == "playerOne"){
-        buttons.forEach(button =>{
-          button.classList.add("player-one");
-        })
-      }
       gameBoard.placeMarker(index, player.getMarker());
       round++;
 
@@ -130,6 +124,8 @@
   const displayController = (function(){
       window.game = gameController();
 
+      const buttons = document.querySelector(".grid");
+
       const quit = document.getElementById('quit');
       const next = document.getElementById("next");
       let scores = document.querySelector(".stat-box");
@@ -151,6 +147,17 @@
 
       let changeNameBox = document.querySelector(".change-name");
 
+      const hoverEffects = () =>{
+        if (game.getCurrentPlayer().getMarker() == "X"){
+          buttons.classList.add("player-one");
+          buttons.classList.remove("player-two");
+        }
+
+        if (game.getCurrentPlayer().getMarker() == "O"){
+          buttons.classList.add("player-two");
+          buttons.classList.remove("player-one");
+        }
+      }
       const displayBoard = () => {
         const board =gameBoard.getBoard();
         cells.forEach((cell, i) => {
@@ -173,6 +180,7 @@
             if (board[button] !== "") return;
             game.gameStart(button);
             displayBoard();
+            hoverEffects();
 
             let winner = game.getWinner();
 
@@ -215,6 +223,7 @@
         game.nextGame();
         displayBoard();
         updateScores();
+        hoverEffects();
         scores.classList.remove("remove");
       })
 
@@ -225,6 +234,7 @@
           game.restartGame();
           displayBoard();
           updateScores();
+          hoverEffects();
         }
         else{
           return;
@@ -239,6 +249,7 @@
         displayBoard();
         updateScores();
         clickCells();
+        hoverEffects();
       };
 
       callGame();
