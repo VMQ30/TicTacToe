@@ -125,15 +125,6 @@ main{
                 inset 0 0 15px var(--second-color);
 }
 
-.player-one button:hover{
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><path d='M304.1 256l99.5-99.5c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 210.7 156.5 111.2c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L207.9 256l-99.5 99.5c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L256 301.3l99.5 99.5c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L304.1 256z' fill='none' stroke='%23ff0084' stroke-width='32' stroke-linejoin='round' stroke-linecap='round'/></svg>");
-}
-
-.player-two button:hover{
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='35' fill='none' stroke='%23ff9100' stroke-width='8'/></svg>");
-}
-
-
 .stat-box{
     position: fixed;
     left:0;
@@ -212,7 +203,7 @@ main{
 .winner-announcement{
     background-color: var(--second-color);
     width: 100vw;
-    height: 30vh;
+    height: 40vh;
     display:flex;
     justify-content: center;
     align-items: center;
@@ -220,6 +211,10 @@ main{
     color:white;
     text-shadow: 3px 3px 0 var(--accent-color1),
                 -3px -3px 0 var(--accent-color2);
+}
+
+.winner-announcement h2{
+    font-size: 50px;
 }
 
 .winner-announcement *{
@@ -247,6 +242,13 @@ main{
     
 }
 
+.player-one button:hover{
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><path d='M304.1 256l99.5-99.5c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 210.7 156.5 111.2c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L207.9 256l-99.5 99.5c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L256 301.3l99.5 99.5c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L304.1 256z' fill='none' stroke='%23ff0084' stroke-width='32' stroke-linejoin='round' stroke-linecap='round'/></svg>");
+}
+
+.player-two button:hover{
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='35' fill='none' stroke='%23ff9100' stroke-width='8'/></svg>");
+}
 
 
 
@@ -258,7 +260,11 @@ main{
     display:none;
 }
 
+.remove{
+    display:none;
+}
+
 .display{
-    display:block;
+    display:flex;
 }
 

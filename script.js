@@ -51,6 +51,7 @@
     const getPlayerTwo = () => playerTwo;
     const getTies = () => ties;
 
+    const buttons = querySelector(".grid")
     let winner;
     const getWinner = () => winner;
 
@@ -69,6 +70,11 @@
 
       let player = getCurrentPlayer();
 
+      if (player == "playerOne"){
+        buttons.forEach(button =>{
+          button.classList.add("player-one");
+        })
+      }
       gameBoard.placeMarker(index, player.getMarker());
       round++;
 
@@ -78,7 +84,7 @@
           player.addScore();
       }
 
-      else if(board.every(cell => cell != "")){
+      else if(gameBoard.getBoard().every(cell => cell != "")){
         gameEnd = true;
         winner = "tie";
         ties++;
@@ -101,6 +107,13 @@
       })
     };
 
+    const nextGame = ()=>{
+      gameBoard.resetBoard();
+      round = 0;
+      gameEnd = false;
+      winner = undefined;
+    }
+
     const restartGame = () => {
       gameBoard.resetBoard();
       round = 0;
@@ -111,11 +124,15 @@
       winner = undefined;
     }
 
-    return{gameStart, restartGame, getCurrentPlayer, getWinner, getPlayerOne, getPlayerTwo, getTies}
+    return{gameStart, nextGame, restartGame, getCurrentPlayer, getWinner, getPlayerOne, getPlayerTwo, getTies}
   }
 
   const displayController = (function(){
       window.game = gameController();
+
+      const quit = document.getElementById('quit');
+      const next = document.getElementById("next");
+      let scores = document.querySelector(".stat-box");
 
       const cells = document.querySelectorAll(".cell");
       const restart = document.getElementById("restart");
@@ -136,8 +153,8 @@
 
       const displayBoard = () => {
         const board =gameBoard.getBoard();
-        cells.forEach((cells, i) => {
-          cells.textContent = board[i];
+        cells.forEach((cell, i) => {
+          cell.textContent = board[i];
         });
       };
 
@@ -161,12 +178,14 @@
 
             if (winner == "tie"){
               congratulatoryMessage.innerText = "It's a Tie!";
-              winnerAnnouncement.innerText = "No One Won!";
+              winnerAnnouncement.innerText = `No One Won!`;
               announcement.classList.add("display");
+              scores.classList.add("remove");
             }
             if (winner == game.getPlayerOne().getName() || winner == game.getPlayerTwo().getName()){
               congratulatoryMessage.innerText = "Congratulations!";
               winnerAnnouncement.innerText = `${winner} Have Won the Round!`;
+              scores.classList.add("remove");
               announcement.classList.add("display");
             }
             
@@ -176,10 +195,40 @@
         
       };
 
-      restart.addEventListener("click", ()=>{
-        game.restartGame();
+      quit.addEventListener("click", () =>{
+        let message = "Are You Sure You Want to Quit the Game?"
+        let quitGame = confirm(message);
+        if(quitGame){
+          game.restartGame();
+          displayBoard();
+          updateScores();
+          announcement.classList.remove("display");
+          scores.classList.remove("remove");
+        }
+        else{
+          return;
+        }
+      })
+
+      next.addEventListener("click", () =>{
+        announcement.classList.remove("display");
+        game.nextGame();
         displayBoard();
         updateScores();
+        scores.classList.remove("remove");
+      })
+
+      restart.addEventListener("click", ()=>{
+        let message = "Are You Sure You Want to Restart the Game?"
+        let restartGame = confirm(message);
+        if(restartGame){
+          game.restartGame();
+          displayBoard();
+          updateScores();
+        }
+        else{
+          return;
+        }
       });
 
       change.addEventListener("click", () =>{
