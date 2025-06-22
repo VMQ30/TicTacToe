@@ -252,15 +252,89 @@ main{
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='35' fill='none' stroke='%23ff9100' stroke-width='8'/></svg>");
 }
 
-
-
-
-
-
-
 .change-name{
+    position: fixed;
+    top:0;
+    height:100vh;
+    width:100vw;
+    background-color: rgba(0,0,0,0.5);
+    backdrop-filter:blur(4px);
+    left:0;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
     display:none;
 }
+
+.change-name-box{
+    background-color: var(--accent-color1);
+    width: 100vw;
+    height: 40vh;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color:white;
+    box-shadow: 0 0 50px var(--second-color);
+    text-shadow: 3px 3px 0 var(--accent-color2),
+                -3px -3px 0 var(--second-color);
+}
+
+.change-name-box h2{
+    font-size: 40px;
+     margin-bottom: 30px;
+}
+
+.change-name-box *{
+    justify-self: center;
+    margin-bottom: 15px;
+}
+
+.change-name-box button{
+    background-color: transparent;
+    padding: 10px 13px;
+    color: white;
+    border: 3px, solid;
+    border-color: white;
+    transition: ease-in-out all 0.3s;
+    cursor: pointer;
+    box-shadow: 0 0 10px white,
+    inset 0 0 10px white;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+
+form input{
+    padding: 5px 10px;
+    background-color: black;
+    color:white;
+}
+
+.change-name-box button:hover{
+    border-color: white;
+    box-shadow: 5px 5px 0 var(--second-color),
+    inset 5px 5px 0 var(--second-color);
+    text-shadow: 0 0 5px white;
+    color:var(--second-color);
+    
+}
+
+.exit{
+    position:relative;
+    top:5%;
+    left: 40%;
+}
+
+
+
+
 
 .remove{
     display:none;

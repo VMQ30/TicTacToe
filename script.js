@@ -122,7 +122,7 @@
   }
 
   const displayController = (function(){
-      window.game = gameController();
+      const game = gameController();
 
       const buttons = document.querySelector(".grid");
 
@@ -134,9 +134,6 @@
       const restart = document.getElementById("restart");
       const change = document.getElementById("change");
 
-      let firstPlayerName = document.getElementById("first-player-name");
-      let secondPlayerName = document.getElementById("second-player-name");
-
       let playerOneScore = document.getElementById("player-one-score-text");
       let playerTwoScore = document.getElementById("player-two-score-text");
       let playerTieScore = document.getElementById("player-tie-score-text");
@@ -146,6 +143,8 @@
       let winnerAnnouncement = document.querySelector(".second-header");
 
       let changeNameBox = document.querySelector(".change-name");
+      const exit = document.querySelector(".exit");
+      const confirmChangeButton = document.querySelector(".change-button");
 
       const hoverEffects = () =>{
         if (game.getCurrentPlayer().getMarker() == "X"){
@@ -205,6 +204,14 @@
         
       };
 
+      const changeName = () =>{
+        let firstPlayerName = document.getElementById("first-player-name").value;
+        let secondPlayerName = document.getElementById("second-player-name").value;
+
+        game.getPlayerOne().setName(firstPlayerName);
+        game.getPlayerTwo().setName(secondPlayerName);
+      }
+
       quit.addEventListener("click", () =>{
         let message = "Are You Sure You Want to Quit the Game?"
         let quitGame = confirm(message);
@@ -243,10 +250,29 @@
         }
       });
 
+      confirmChangeButton.addEventListener("click", () =>{
+        changeName();
+      });
       change.addEventListener("click", () =>{
         changeNameBox.classList.add("display");
-      })
+        scores.classList.add("remove");
+      });
 
+      exit.addEventListener("click", () =>{
+        changeNameBox.classList.remove("display");
+        scores.classList.remove("remove");
+      });
+
+      changeNameBox.addEventListener("click", () =>{
+        changeNameBox.classList.remove("display");
+        scores.classList.remove("remove");
+      });
+
+      const nameBox = document.querySelector(".change-name-box");
+      nameBox.addEventListener("click", (event) =>{
+        event.stopPropagation();
+      })
+      
       const callGame = () =>{
         displayBoard();
         updateScores();
